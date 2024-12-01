@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Menu</title>
+    <title>Daftar Menu - Wom Resto</title>
     <link rel="stylesheet" href="/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
@@ -18,6 +18,7 @@
     <section class="menu">
         <h2>Daftar Menu</h2>
 
+        <!-- Menu Items -->
         <div class="menu-item">
             <img src="/img/nasi-goreng.jpg" alt="Nasi Goreng" class="menu-image">
             <div class="menu-info">
@@ -59,13 +60,37 @@
             <img src="/img/teh-tarik.jpg" alt="Teh Tarik" class="menu-image">
             <div class="menu-info">
                 <span class="menu-name">Teh Tarik</span>
-                <p class="menu-desc">Minuman penghilang dahaga saat haus</p>
+                <p class="menu-desc">Minuman penghilang dahaga saat haus.</p>
                 <span class="menu-price">Rp10,000</span>
             </div>
         </div>
 
-        <button id="orderBtn">Buat Pesanan</button>
+        <!-- Order Form Section -->
+        <section class="order">
+            <h2>Pesan Sekarang</h2>
+            <form action="OrderController" method="POST">
+                <label for="menu-item">Pilih Menu</label>
+                <select name="menu_item" id="menu-item">
+                    <option value="Nasi Goreng">Nasi Goreng</option>
+                    <option value="Ayam Bakar">Ayam Bakar</option>
+                    <option value="Soto Ayam">Soto Ayam</option>
+                    <option value="Ayam Goreng">Ayam Goreng</option>
+                    <option value="Teh Tarik">Teh Tarik</option>
+                </select>
+
+                <label for="quantity">Jumlah</label>
+                <input type="number" name="quantity" id="quantity" min="1" value="1">
+
+                <label for="name">Nama</label>
+                <input type="text" name="name" id="name" required>
+            </form>
+        </section>
     </section>
+
+    <footer>
+        <hr>
+        <p>&copy; 2024 Wom Resto - All Rights Reserved</p>
+    </footer>
 </body>
 
 </html>
