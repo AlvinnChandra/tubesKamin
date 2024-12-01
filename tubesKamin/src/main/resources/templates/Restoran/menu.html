@@ -22,67 +22,75 @@
         <div class="menu-item">
             <img src="/img/nasi-goreng.jpg" alt="Nasi Goreng" class="menu-image">
             <div class="menu-info">
-                <span class="menu-name">Nasi Goreng</span>
+                <label>
+                    <input type="checkbox" name="menu_items" value="Nasi Goreng">
+                    Nasi Goreng (Rp20,000)
+                </label>
                 <p class="menu-desc">Nasi goreng dengan bumbu spesial dan tambahan telur mata sapi.</p>
-                <span class="menu-price">Rp20,000</span>
             </div>
         </div>
 
         <div class="menu-item">
             <img src="/img/ayam-bakar.jpg" alt="Ayam Bakar" class="menu-image">
             <div class="menu-info">
-                <span class="menu-name">Ayam Bakar</span>
+                <label>
+                    <input type="checkbox" name="menu_items" value="Ayam Bakar">
+                    Ayam Bakar (Rp25,000)
+                </label>
                 <p class="menu-desc">Ayam bakar dengan bumbu rempah khas dan sambal pedas.</p>
-                <span class="menu-price">Rp25,000</span>
             </div>
         </div>
 
         <div class="menu-item">
             <img src="/img/soto-ayam.jpg" alt="Soto Ayam" class="menu-image">
             <div class="menu-info">
-                <span class="menu-name">Soto Ayam</span>
+                <label>
+                    <input type="checkbox" name="menu_items" value="Soto Ayam">
+                    Soto Ayam (Rp18,000)
+                </label>
                 <p class="menu-desc">Soto ayam dengan kuah gurih dan pelengkap seperti telur dan perkedel.</p>
-                <span class="menu-price">Rp18,000</span>
             </div>
         </div>
 
         <div class="menu-item">
             <img src="/img/ayam-goreng.jpeg" alt="Ayam Goreng" class="menu-image">
             <div class="menu-info">
-                <span class="menu-name">Ayam Goreng</span>
+                <label>
+                    <input type="checkbox" name="menu_items" value="Ayam Goreng">
+                    Ayam Goreng (Rp18,000)
+                </label>
                 <p class="menu-desc">Ayam goreng renyah dengan bumbu tradisional yang meresap hingga ke dalam, disajikan
                     dengan sambal dan lalapan segar.</p>
-                <span class="menu-price">Rp18,000</span>
             </div>
         </div>
 
         <div class="menu-item">
             <img src="/img/teh-tarik.jpg" alt="Teh Tarik" class="menu-image">
             <div class="menu-info">
-                <span class="menu-name">Teh Tarik</span>
+                <label>
+                    <input type="checkbox" name="menu_items" value="Teh Tarik">
+                    Teh Tarik (Rp10,000)
+                </label>
                 <p class="menu-desc">Minuman penghilang dahaga saat haus.</p>
-                <span class="menu-price">Rp10,000</span>
             </div>
         </div>
 
-        <!-- Order Form Section -->
         <section class="order">
             <h2>Pesan Sekarang</h2>
-            <form action="OrderController" method="POST">
-                <label for="menu-item">Pilih Menu</label>
-                <select name="menu_item" id="menu-item">
-                    <option value="Nasi Goreng">Nasi Goreng</option>
-                    <option value="Ayam Bakar">Ayam Bakar</option>
-                    <option value="Soto Ayam">Soto Ayam</option>
-                    <option value="Ayam Goreng">Ayam Goreng</option>
-                    <option value="Teh Tarik">Teh Tarik</option>
-                </select>
+            <form action="/order" method="POST">
 
-                <label for="quantity">Jumlah</label>
-                <input type="number" name="quantity" id="quantity" min="1" value="1">
+                <div id="quantity-fields"></div>
 
                 <label for="name">Nama</label>
                 <input type="text" name="name" id="name" required>
+
+                <label for="phone">Nomor Telepon</label>
+                <input type="tel" name="phone" id="phone" required>
+
+                <label for="order_date">Tanggal Pesanan</label>
+                <input type="date" name="order_date" id="order_date" required>
+
+                <button type="submit">Pesan</button>
             </form>
         </section>
     </section>
@@ -91,6 +99,42 @@
         <hr>
         <p>&copy; 2024 Wom Resto - All Rights Reserved</p>
     </footer>
+
+    <script>
+        const menuItems = document.querySelectorAll('input[name="menu_items"]');
+        const quantityFieldsContainer = document.getElementById('quantity-fields');
+
+        menuItems.forEach(item => {
+            item.addEventListener('change', function () {
+                if (this.checked) {
+                    const quantityDiv = document.createElement('div');
+                    quantityDiv.classList.add('quantity-input');
+
+                    const menuName = this.value;
+                    const inputField = document.createElement('input');
+                    inputField.type = 'number';
+                    inputField.name = `quantity_${menuName}`;
+                    inputField.min = '1';
+                    inputField.value = '1';
+                    inputField.id = `quantity_${menuName}`;
+
+                    const label = document.createElement('label');
+                    label.setAttribute('for', inputField.id);
+                    label.textContent = `Jumlah ${menuName}`;
+
+                    quantityDiv.appendChild(label);
+                    quantityDiv.appendChild(inputField);
+
+                    quantityFieldsContainer.appendChild(quantityDiv);
+                } else {
+                    const quantityDiv = document.getElementById(`quantity_${this.value}`);
+                    if (quantityDiv) {
+                        quantityDiv.parentElement.removeChild(quantityDiv);
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
