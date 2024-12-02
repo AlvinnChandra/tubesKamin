@@ -18,7 +18,7 @@ import javax.imageio.ImageIO;
 
 public class QRCodeScanner {
     public static void main(String[] args) {
-        try {
+        try {   
             //Path QR Code
             String filePath = "src/main/resources/static/QRCode/QR102.png"; //File QR yang mau dibaca
 

@@ -30,7 +30,7 @@ public class Main {
 
             String encryptedQRCode = encrypt(qrCodeString, keyPair.getPublic());
 
-            Date expiryTime = getExpiryTime(60);
+            Date expiryTime = getExpiryTime(1);
 
             String filePath = "src/main/resources/static/QRCode/QR102.png";
             generateQRCode(encryptedQRCode, filePath);
