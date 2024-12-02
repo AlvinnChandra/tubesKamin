@@ -12,7 +12,7 @@ public class UserLoginRepository {
         try {
             Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:5432/manpro",
+                    "jdbc:postgresql://localhost:5432/kamin",
                     "postgres",
                     "7november2003");
         } catch (ClassNotFoundException | SQLException e) {

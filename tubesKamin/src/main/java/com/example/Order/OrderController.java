@@ -15,20 +15,23 @@ public class OrderController {
 
     @PostMapping("/order")
     public String placeOrder(@RequestParam Map<String, String> params) {
-        String name = params.get("name");
+        String nama = params.get("name");
         String phone = params.get("phone");
 
-        // Menyimpan pesanan untuk setiap menu yang dipilih
+        // Simpan data utama ke tabel `orders` dan dapatkan ID pesanan
+        int orderId = orderRepository.saveOrder(nama, phone);
+
+        // Simpan data menu ke tabel `order_details`
         for (String key : params.keySet()) {
             if (key.startsWith("quantity_")) {
                 String menu = key.replace("quantity_", "");
-                int quantity = Integer.parseInt(params.get(key));
+                int jumlah = Integer.parseInt(params.get(key));
 
-                // Simpan ke database
-                orderRepository.saveOrder(menu, quantity, name, phone);
+                // Simpan detail menu ke tabel `order_details`
+                orderRepository.saveOrderDetails(orderId, menu, jumlah);
             }
         }
 
-        return "orderSuccess"; // Ganti dengan nama view yang ingin ditampilkan setelah pemesanan berhasil
+        return "/Restoran/order"; // Redirect ke halaman konfirmasi
     }
 }

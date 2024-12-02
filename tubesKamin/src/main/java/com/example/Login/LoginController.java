@@ -19,7 +19,7 @@ public class LoginController {
     // Menampilkan halaman login
     @GetMapping("/login")
     public String showLoginForm() {
-        return "/Restoran/login"; // Mengarah ke login.html
+        return "/Restoran/login"; 
     }
 
     // Menangani proses login
