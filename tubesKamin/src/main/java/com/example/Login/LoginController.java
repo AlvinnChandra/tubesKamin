@@ -19,7 +19,7 @@ public class LoginController {
     // Menampilkan halaman login
     @GetMapping("/login")
     public String showLoginForm() {
-        return "/Restoran/login"; 
+        return "/Restoran/login";
     }
 
     // Menangani proses login
@@ -47,5 +47,10 @@ public class LoginController {
     @GetMapping("/menu")
     public String menuPage() {
         return "/Restoran/menu";
+    }
+
+    @GetMapping("/order")
+    public String orderPage() {
+        return "/Restoran/order";
     }
 }
