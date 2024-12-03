@@ -14,6 +14,11 @@ public class AppController {
     @Autowired
     private OrderRepository orderRepository;
 
+    @GetMapping("/order")
+    public String order() {
+        return "/Restoran/order";
+    }
+
     @PostMapping("/order")
     public String createOrder(
             @RequestParam String name,

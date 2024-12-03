@@ -22,7 +22,7 @@ public class UserLoginRepository {
 
     public UserLogin findByUsername(String username) {
         try (PreparedStatement stmt = connection.prepareStatement(
-                "SELECT id, username, password, role FROM login WHERE username = ?")) {
+                "SELECT id, username, password, role FROM user_login WHERE username = ?")) {
             stmt.setString(1, username);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
