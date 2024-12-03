@@ -32,14 +32,12 @@
 </head>
 <body>
     <div class="container">
-        <h1>QR Code Result</h1>
+        <h1>Order Confirmation</h1>
         <div>
-            <p><strong>Order Number:</strong> <span th:text="${orderNumber}"></span></p>
+            <p class="success"><strong>Order Number:</strong> <span th:text="${orderNumbers}"></span></p>
             <p><strong>Order Details:</strong> <span th:text="${orderDetails}"></span></p>
-        </div>
-        <div>
-            <a href="/">Scan Another QR Code</a>
+            <p><strong>Your QR Code:</strong></p>
+            <img th:src="@{/QRCode/${qrCodePath}}" alt="QR Code" />
         </div>
     </div>
 </body>
-</html>

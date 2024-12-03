@@ -1,7 +1,12 @@
 package com.example;
 
 import java.security.*;
+import java.security.spec.X509EncodedKeySpec;
+
 import javax.crypto.Cipher;
+
+import org.springframework.stereotype.Component;
+
 import com.google.zxing.*;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
@@ -14,36 +19,11 @@ import java.util.Base64;
 import java.util.Date;
 import java.time.Instant;
 
-public class Main {
-    public static void main(String[] args) {
-        try {
-            //Bikin String
-            String orderNumber = "102"; //Connect DB
-            String orderDetails = "Ayam Goreng"; //Connect DB
-            String qrCodeString = generateQRCodeString(orderNumber, orderDetails);
-
-            //Encrypt String
-            KeyPair keyPair = generateKeyPair(); //Bikin Key
-            saveKeyToFile("public.key", keyPair.getPublic());
-            saveKeyToFile("private.key", keyPair.getPrivate());
-
-
-            String encryptedQRCode = encrypt(qrCodeString, keyPair.getPublic());
-
-            Date expiryTime = getExpiryTime(1);
-
-            String filePath = "src/main/resources/static/QRCode/QR102.png";
-            generateQRCode(encryptedQRCode, filePath);
-
-            System.out.println("QR Code generated at: " + filePath);
-            System.out.println("Expiry time " + expiryTime);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    } 
+@Component
+public class QRCodeGenerator {
     
     //Bikin String Buat di encrypt
-    public static String generateQRCodeString(String orderNumber, String orderDetails){
+    public String generateQRCodeString(String orderNumber, String orderDetails){
         String firstDigit = orderNumber.substring(0, 1);
         String lastTwoDigit = orderNumber.substring(orderNumber.length() - 2);
         String formattedDetails = orderDetails.replaceAll("\\s", ""); //Hapus Spasi
@@ -57,7 +37,7 @@ public class Main {
         return keyGen.generateKeyPair(); //Menghasilkan public key dan private key
     }
 
-    public static String encrypt(String data, PublicKey publicKey) throws Exception {
+    public String encrypt(String data, PublicKey publicKey) throws Exception {
         Cipher cipher = Cipher.getInstance("RSA"); //Object Cipher untuk enkripsi dengan algoritma RSA
         cipher.init(Cipher.ENCRYPT_MODE, publicKey); //Encrypt menggunakan public Key
         byte[] encryptedData = cipher.doFinal(data.getBytes()); //Konversi String menjadi byte agar dapat dienkripsi
@@ -83,5 +63,12 @@ public class Main {
         try(FileOutputStream fos = new FileOutputStream(filename)){
             fos.write(key.getEncoded());
         }
+    }
+
+    public PublicKey loadPublicKey(String filename) throws Exception {
+        byte[] keyBytes = Files.readAllBytes(Paths.get(filename));
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
+        return keyFactory.generatePublic(spec);
     }
 }
