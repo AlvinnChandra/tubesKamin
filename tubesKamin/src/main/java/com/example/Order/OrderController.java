@@ -2,6 +2,7 @@ package com.example.Order;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -12,6 +13,11 @@ public class OrderController {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @GetMapping("/order")
+    public String orderPage() {
+        return "/Restoran/order"; // Mengarah ke file `order.html` di folder templates (jika pakai Thymeleaf
+    }
 
     @PostMapping("/order")
     public String placeOrder(@RequestParam Map<String, String> params) {
@@ -32,6 +38,6 @@ public class OrderController {
             }
         }
 
-        return "/Restoran/order"; // Redirect ke halaman konfirmasi
+        return "/Restoran/order";
     }
 }
