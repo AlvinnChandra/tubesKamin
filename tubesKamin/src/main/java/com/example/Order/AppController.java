@@ -14,9 +14,9 @@ public class AppController {
     @Autowired
     private OrderRepository orderRepository;
 
-    @GetMapping("/order")
+    @GetMapping("/history")
     public String showOrderPage() {
-        return "/Restoran/order"; // Mengarah ke order.html di dalam src/main/resources/templates
+        return "/Restoran/history"; // Mengarah ke order.html di dalam src/main/resources/templates
     }
 
     @PostMapping("/order")

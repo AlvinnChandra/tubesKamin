@@ -49,8 +49,8 @@ public class LoginController {
         return "/Restoran/menu";
     }
 
-    @GetMapping("/order")
+    @GetMapping("/history")
     public String orderPage() {
-        return "/Restoran/order";
+        return "/Restoran/history";
     }
 }
