@@ -1,3 +1,4 @@
+/* Umum */
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
@@ -79,19 +80,13 @@ header p {
     color: #333;
 }
 
-.menu-desc {
-    font-size: 14px;
-    color: #666;
-    line-height: 1.4;
-}
-
 .menu-price {
     font-size: 16px;
     font-weight: bold;
     color: #e91e63;
 }
 
-/* Button */
+/* Tombol */
 #orderBtn {
     display: block;
     margin: 30px auto;
@@ -108,4 +103,12 @@ header p {
 
 #orderBtn:hover {
     background-color: #d81b60;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 10px 0;
+    background-color: #f4f4f4;
+    margin-top: 20px;
 }

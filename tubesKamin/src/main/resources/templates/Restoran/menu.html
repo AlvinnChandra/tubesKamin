@@ -4,9 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Menu - Wom Resto</title>
+    <title>Pesan Menu - Wom Resto</title>
     <link rel="stylesheet" href="/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -15,82 +14,62 @@
         <p>Rasakan kelezatan dalam setiap gigitan</p>
     </header>
 
-    <a href="order" class="order-button">History Oderan</a>
+    <a href="order">History Pemesanan</a>
+    <section class="order-form">
+        <h2>Pesan Sekarang</h2>
+        <form action="/api/order" method="POST">
+            <!-- Nama -->
+            <label for="name">Nama:</label>
+            <input type="text" id="name" name="name" placeholder="Nama Anda" required>
 
-    <section class="menu">
-        <h2>Daftar Menu</h2>
+            <!-- Nomor Telepon -->
+            <label for="phone">Nomor Telepon:</label>
+            <input type="tel" id="phone" name="phone" placeholder="No telepon" required>
 
-        <!-- Menu Items -->
-        <div class="menu-item">
-            <img src="/img/nasi-goreng.jpg" alt="Nasi Goreng" class="menu-image">
-            <div class="menu-info">
+            <!-- Pilihan Menu -->
+            <h3>Pilih Menu:</h3>
+            <div class="menu-item">
+                <img src="/img/nasi-goreng.jpg" alt="Nasi Goreng" class="menu-image">
                 <label>
-                    <input type="checkbox" name="menu_items" value="Nasi Goreng">
+                    <input type="checkbox" name="menu_items" value="Nasi Goreng" class="menu-checkbox">
                     Nasi Goreng (Rp20,000)
                 </label>
-                <p class="menu-desc">Nasi goreng dengan bumbu spesial dan tambahan telur mata sapi.</p>
+                <input type="number" name="quantity_Nasi Goreng" class="quantity-input" min="1" placeholder="Jumlah"
+                    disabled>
             </div>
-        </div>
 
-        <div class="menu-item">
-            <img src="/img/ayam-bakar.jpg" alt="Ayam Bakar" class="menu-image">
-            <div class="menu-info">
+            <div class="menu-item">
+                <img src="/img/ayam-bakar.jpg" alt="Ayam Bakar" class="menu-image">
                 <label>
-                    <input type="checkbox" name="menu_items" value="Ayam Bakar">
+                    <input type="checkbox" name="menu_items" value="Ayam Bakar" class="menu-checkbox">
                     Ayam Bakar (Rp25,000)
                 </label>
-                <p class="menu-desc">Ayam bakar dengan bumbu rempah khas dan sambal pedas.</p>
+                <input type="number" name="quantity_Ayam Bakar" class="quantity-input" min="1" placeholder="Jumlah"
+                    disabled>
             </div>
-        </div>
 
-        <div class="menu-item">
-            <img src="/img/soto-ayam.jpg" alt="Soto Ayam" class="menu-image">
-            <div class="menu-info">
+            <div class="menu-item">
+                <img src="/img/soto-ayam.jpg" alt="Soto Ayam" class="menu-image">
                 <label>
-                    <input type="checkbox" name="menu_items" value="Soto Ayam">
+                    <input type="checkbox" name="menu_items" value="Soto Ayam" class="menu-checkbox">
                     Soto Ayam (Rp18,000)
                 </label>
-                <p class="menu-desc">Soto ayam dengan kuah gurih dan pelengkap seperti telur dan perkedel.</p>
+                <input type="number" name="quantity_Soto Ayam" class="quantity-input" min="1" placeholder="Jumlah"
+                    disabled>
             </div>
-        </div>
-
-        <div class="menu-item">
-            <img src="/img/ayam-goreng.jpeg" alt="Ayam Goreng" class="menu-image">
-            <div class="menu-info">
+            <div class="menu-item">
+                <img src="/img/teh-tarik.jpg" alt="Teh Tarik" class="menu-image">
                 <label>
-                    <input type="checkbox" name="menu_items" value="Ayam Goreng">
-                    Ayam Goreng (Rp18,000)
-                </label>
-                <p class="menu-desc">Ayam goreng renyah dengan bumbu tradisional yang meresap hingga ke dalam, disajikan
-                    dengan sambal dan lalapan segar.</p>
-            </div>
-        </div>
-
-        <div class="menu-item">
-            <img src="/img/teh-tarik.jpg" alt="Teh Tarik" class="menu-image">
-            <div class="menu-info">
-                <label>
-                    <input type="checkbox" name="menu_items" value="Teh Tarik">
+                    <input type="checkbox" name="menu_items" value="Teh Tarik" class="menu-checkbox">
                     Teh Tarik (Rp10,000)
                 </label>
-                <p class="menu-desc">Minuman penghilang dahaga saat haus.</p>
+                <input type="number" name="quantity_Teh Tarik" class="quantity-input" min="1" placeholder="Jumlah"
+                    disabled>
             </div>
-        </div>
 
-        <section class="order">
-            <h2>Pesan Sekarang</h2>
-            <form action="/order" method="POST">
-                <div id="quantity-fields"></div>
-
-                <label for="name">Nama</label>
-                <input type="text" name="name" id="name" required>
-
-                <label for="phone">Nomor Telepon</label>
-                <input type="tel" name="phone" id="phone" required>
-
-                <button type="submit">Pesan</button>
-            </form>
-        </section>
+            <!-- Tombol Submit -->
+            <button type="submit">Pesan</button>
+        </form>
     </section>
 
     <footer>
@@ -98,37 +77,18 @@
         <p>&copy; 2024 Wom Resto - All Rights Reserved</p>
     </footer>
 
+    <!-- JavaScript -->
     <script>
-        const menuItems = document.querySelectorAll('input[name="menu_items"]');
-        const quantityFieldsContainer = document.getElementById('quantity-fields');
-
-        menuItems.forEach(item => {
-            item.addEventListener('change', function () {
+        // Aktifkan input jumlah hanya jika menu dipilih
+        const checkboxes = document.querySelectorAll('.menu-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                const quantityInput = this.closest('.menu-item').querySelector('.quantity-input');
                 if (this.checked) {
-                    const quantityDiv = document.createElement('div');
-                    quantityDiv.classList.add('quantity-input');
-
-                    const menuName = this.value;
-                    const inputField = document.createElement('input');
-                    inputField.type = 'number';
-                    inputField.name = `quantity_${menuName}`;
-                    inputField.min = '1';
-                    inputField.value = '1';
-                    inputField.id = `quantity_${menuName}`;
-
-                    const label = document.createElement('label');
-                    label.setAttribute('for', inputField.id);
-                    label.textContent = `Jumlah ${menuName}`;
-
-                    quantityDiv.appendChild(label);
-                    quantityDiv.appendChild(inputField);
-
-                    quantityFieldsContainer.appendChild(quantityDiv);
+                    quantityInput.disabled = false;
                 } else {
-                    const quantityDiv = document.getElementById(`quantity_${this.value}`);
-                    if (quantityDiv) {
-                        quantityDiv.parentElement.removeChild(quantityDiv);
-                    }
+                    quantityInput.disabled = true;
+                    quantityInput.value = ''; // Reset jumlah
                 }
             });
         });

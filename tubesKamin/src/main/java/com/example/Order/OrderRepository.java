@@ -2,36 +2,37 @@ package com.example.Order;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 @Repository
 public class OrderRepository {
-
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    // Simpan data ke tabel 'orders' dan dapatkan ID pesanan
-    public int saveOrder(String nama, String phone) {
-        String sql = "INSERT INTO orders (nama, phone, order_date) VALUES (?, ?, CURRENT_TIMESTAMP)";
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sql, new String[] { "id" });
-            ps.setString(1, nama);
-            ps.setString(2, phone);
-            return ps;
-        }, keyHolder);
-
-        return keyHolder.getKey().intValue();
+    public void addOrder(OrderData order) {
+        String sql = "INSERT INTO orders (id_user, menu, jumlah) VALUES (?, ?, ?)";
+        jdbcTemplate.update(sql, order.getIdUser(), order.getMenu(), order.getJumlah());
     }
 
-    // Simpan data ke tabel 'order_details'
-    public void saveOrderDetails(int orderId, String menu, int jumlah) {
-        String sql = "INSERT INTO order_details (order_id, menu, jumlah) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, orderId, menu, jumlah);
+    public List<OrderData> getOrdersByUserId(int idUser) {
+        String sql = "SELECT * FROM orders WHERE id_user = ?";
+        return jdbcTemplate.query(sql, this::mapRowToOrder, idUser); // Menggunakan mapRowToOrder
+    }
+
+    public List<OrderData> getAllOrders() {
+        String sql = "SELECT * FROM orders";
+        return jdbcTemplate.query(sql, this::mapRowToOrder); // Menggunakan mapRowToOrder
+    }
+
+    private OrderData mapRowToOrder(ResultSet resultSet, int rowNum) throws SQLException {
+        return new OrderData(
+                resultSet.getInt("no_pesanan"),
+                resultSet.getInt("id_user"),
+                resultSet.getString("menu"),
+                resultSet.getInt("jumlah"));
     }
 }

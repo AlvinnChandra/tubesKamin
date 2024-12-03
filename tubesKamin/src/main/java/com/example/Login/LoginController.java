@@ -25,7 +25,7 @@ public class LoginController {
     // Menangani proses login
     @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password, Model model) {
-        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+        String sql = "SELECT * FROM login WHERE username = ? AND password = ?";
         try {
             Map<String, Object> user = jdbcTemplate.queryForMap(sql, username, password);
 
