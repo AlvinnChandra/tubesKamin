@@ -13,26 +13,31 @@ public class OrderRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public void addOrder(OrderData order) {
-        String sql = "INSERT INTO orders (id_user, menu, jumlah) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, order.getIdUser(), order.getMenu(), order.getJumlah());
+    // Tambahkan header transaksi ke tabel orders
+    public int addOrderHeader(OrderHeaderData orderHeader) {
+        String sql = "INSERT INTO orders (id_user) VALUES (?) RETURNING no_pesanan";
+        return jdbcTemplate.queryForObject(sql, Integer.class, orderHeader.getIdUser());
     }
 
-    public List<OrderData> getOrdersByUserId(int idUser) {
-        String sql = "SELECT * FROM orders WHERE id_user = ?";
-        return jdbcTemplate.query(sql, this::mapRowToOrder, idUser); // Menggunakan mapRowToOrder
+    // Tambahkan detail transaksi ke tabel order_items
+    public void addOrderItem(int noPesanan, String menu, int quantity) {
+        String sql = "INSERT INTO order_items (no_pesanan, menu, jumlah) VALUES (?, ?, ?)";
+        jdbcTemplate.update(sql, noPesanan, menu, quantity);
+    }    
+
+    // Ambil semua detail berdasarkan no_pesanan
+    public List<OrderData> getOrderItemsByOrderId(int noPesanan) {
+        String sql = "SELECT * FROM order_items WHERE no_pesanan = ?";
+        return jdbcTemplate.query(sql, this::mapRowToOrderItem, noPesanan);
     }
 
-    public List<OrderData> getAllOrders() {
-        String sql = "SELECT * FROM orders";
-        return jdbcTemplate.query(sql, this::mapRowToOrder); // Menggunakan mapRowToOrder
-    }
-
-    private OrderData mapRowToOrder(ResultSet resultSet, int rowNum) throws SQLException {
+    // Mapping untuk tabel order_items
+    private OrderData mapRowToOrderItem(ResultSet resultSet, int rowNum) throws SQLException {
         return new OrderData(
+                resultSet.getInt("id"),
                 resultSet.getInt("no_pesanan"),
-                resultSet.getInt("id_user"),
                 resultSet.getString("menu"),
                 resultSet.getInt("jumlah"));
     }
 }
+

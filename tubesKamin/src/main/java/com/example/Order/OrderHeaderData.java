@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderData {
-    private int id;
+public class OrderHeaderData {
     private int noPesanan;
-    private String menu;
-    private int jumlah;
+    private int idUser;
 }

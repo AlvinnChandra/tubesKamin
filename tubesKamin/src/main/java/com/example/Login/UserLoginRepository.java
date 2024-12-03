@@ -14,7 +14,7 @@ public class UserLoginRepository {
             connection = DriverManager.getConnection(
                     "jdbc:postgresql://localhost:5432/kamin",
                     "postgres",
-                    "7november2003");
+                    "postgres");
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
