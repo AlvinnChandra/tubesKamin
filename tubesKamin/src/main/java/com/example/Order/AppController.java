@@ -1,19 +1,27 @@
 package com.example.Order;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 
-@RestController
+@Controller
 @RequestMapping("/api")
 public class AppController {
+
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private OrderRepository orderRepository;
+
+    // Route untuk menampilkan halaman order
+    @GetMapping("/order")
+    public String showOrderPage() {
+        return "/Restoran/order";  // Menampilkan order.html dari templates/Restoran/order.html
+    }
 
     @PostMapping("/order")
     public String createOrder(
@@ -32,7 +40,7 @@ public class AppController {
         int noPesanan = orderRepository.addOrderHeader(new OrderHeaderData(0, user.getIdUser()));
 
         if (noPesanan <= 0) {
-            return "Terjadi kesalahan saat memproses pesanan. Coba lagi.";
+            return "redirect:/error"; // Redirect ke halaman error jika gagal
         }
 
         // 4. Simpan pesanan untuk setiap menu yang dipilih
@@ -46,13 +54,12 @@ public class AppController {
             }
         });
 
-        return "Pesanan berhasil dibuat!";
+        // Redirect ke halaman order
+        return "forward:/Restoran/order";  // Gunakan forward jika ingin menggunakan file HTML dari templates
     }
-
 
     @GetMapping("/order/{noPesanan}")
     public List<OrderData> getOrderDetails(@PathVariable int noPesanan) {
         return orderRepository.getOrderItemsByOrderId(noPesanan);
     }
 }
-
