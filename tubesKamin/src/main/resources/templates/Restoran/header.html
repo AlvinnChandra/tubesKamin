@@ -1,0 +1,14 @@
+<html th:fragment="headerAdmin">
+    <head>
+        <link rel="stylesheet" href="/style.css">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <header>
+            <h1>Wom Resto</h1>
+            <p>Rasakan kelezatan dalam setiap gigitan</p>
+            <a th:href="@{/admin/menu}" class="button"><button>Menu</button></a>
+            <a th:href="@{/admin/order}" class="button"><button>Order</button></a>
+        </header>
+    </body>
+</html>

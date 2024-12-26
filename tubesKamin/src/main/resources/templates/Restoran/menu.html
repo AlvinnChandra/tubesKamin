@@ -9,94 +9,28 @@
 </head>
 
 <body>
-    <header>
-        <h1>Wom Resto</h1>
-        <p>Rasakan kelezatan dalam setiap gigitan</p>
-    </header>
+    <!-- Header -->
+    <th:block th:include="~{Restoran/header :: headerAdmin}"></th:block>
 
-    <div th:if="${error}" class="error-message">
-        <p th:text="${error}"></p>
-    </div>
+    <section class="menu">
+        <h2>Daftar Menu</h2>
 
-    <a href="order">History Pemesanan</a>
-    <section class="order-form">
-        <h2>Pesan Sekarang</h2>
-        <form action="/menu" method="POST">
-            <!-- Nama -->
-            <label for="name">Nama:</label>
-            <input type="text" id="name" name="name" placeholder="Nama Anda" required>
-
-            <!-- Nomor Telepon -->
-            <label for="phone">Nomor Telepon:</label>
-            <input type="tel" id="phone" name="phone" placeholder="No telepon" required>
-
-            <!-- Pilihan Menu -->
-            <h3>Pilih Menu:</h3>
-            <div class="menu-item">
-                <img src="/img/nasi-goreng.jpg" alt="Nasi Goreng" class="menu-image">
-                <label>
-                    <input type="checkbox" name="menu_items" value="Nasi Goreng" class="menu-checkbox">
-                    Nasi Goreng (Rp20,000)
-                </label>
-                <input type="number" name="quantity_Nasi Goreng" class="quantity-input" min="1" placeholder="Jumlah"
-                    disabled>
+        <div th:each="item : ${menuItems}" class="menu-item">
+            <img src="/img/nasi-goreng.jpg" alt="Nasi Goreng" class="menu-image">
+            <div class="menu-info">
+                <span class="menu-name" th:text="${item.nama}"></span>
+                <p class="menu-desc" th:text="${item.description}"></p>
+                <span class="menu-price" th:text="${item.price}"></span>
             </div>
+        </div>
 
-            <div class="menu-item">
-                <img src="/img/ayam-bakar.jpg" alt="Ayam Bakar" class="menu-image">
-                <label>
-                    <input type="checkbox" name="menu_items" value="Ayam Bakar" class="menu-checkbox">
-                    Ayam Bakar (Rp25,000)
-                </label>
-                <input type="number" name="quantity_Ayam Bakar" class="quantity-input" min="1" placeholder="Jumlah"
-                    disabled>
-            </div>
-
-            <div class="menu-item">
-                <img src="/img/soto-ayam.jpg" alt="Soto Ayam" class="menu-image">
-                <label>
-                    <input type="checkbox" name="menu_items" value="Soto Ayam" class="menu-checkbox">
-                    Soto Ayam (Rp18,000)
-                </label>
-                <input type="number" name="quantity_Soto Ayam" class="quantity-input" min="1" placeholder="Jumlah"
-                    disabled>
-            </div>
-            <div class="menu-item">
-                <img src="/img/teh-tarik.jpg" alt="Teh Tarik" class="menu-image">
-                <label>
-                    <input type="checkbox" name="menu_items" value="Teh Tarik" class="menu-checkbox">
-                    Teh Tarik (Rp10,000)
-                </label>
-                <input type="number" name="quantity_Teh Tarik" class="quantity-input" min="1" placeholder="Jumlah"
-                    disabled>
-            </div>
-
-            <!-- Tombol Submit -->
-            <button type="submit">Pesan</button>
-        </form>
+        <button id="orderBtn" onclick="location.href='/admin/order'">Buat Pesanan</button>
     </section>
 
     <footer>
         <hr>
         <p>&copy; 2024 Wom Resto - All Rights Reserved</p>
     </footer>
-
-    <!-- JavaScript -->
-    <script>
-        // Aktifkan input jumlah hanya jika menu dipilih
-        const checkboxes = document.querySelectorAll('.menu-checkbox');
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', function () {
-                const quantityInput = this.closest('.menu-item').querySelector('.quantity-input');
-                if (this.checked) {
-                    quantityInput.disabled = false;
-                } else {
-                    quantityInput.disabled = true;
-                    quantityInput.value = ''; // Reset jumlah
-                }
-            });
-        });
-    </script>
 </body>
 
 </html>
