@@ -17,15 +17,22 @@ public class adminController {
 
     @GetMapping("/menu")
     public String showMenuPage(Model model) {
-        List<DataInventories> menuItem = adminRepository.findAll();
+        List<DataInventories> menuItem = adminRepository.findAllInventories();
         model.addAttribute("menuItems", menuItem);
         return "/Restoran/menu";
     }
 
     @GetMapping("/order")
     public String showOrderPage(Model model){
-        List<DataInventories> menuItem = adminRepository.findAll();
+        List<DataInventories> menuItem = adminRepository.findAllInventories();
         model.addAttribute("menuItems", menuItem);
         return "/Restoran/orderPage";
+    }
+
+    @GetMapping("/transaksi")
+    public String showTransaksiPage(Model model){
+        List<DataTransaksi> transaksiList = adminRepository.findAllTransaksi();
+        model.addAttribute("transaksiList", transaksiList);
+        return "Restoran/transaksi";
     }
 }
