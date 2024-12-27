@@ -1,8 +1,10 @@
 package com.example.admin;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -37,5 +39,22 @@ public class adminJdbc implements adminRepository {
             transaksi.setJumlah(rs.getInt("jumlah"));
             return transaksi;
         });
+    }
+
+    @Override
+    public Optional<DataUsers> findName(String name){
+        String sql = "SELECT id_user, nama, no_telepon, peran FROM users WHERE nama = ?";
+        List<DataUsers> listData = jdbcTemplate.query(
+            sql, 
+            ps -> ps.setString(1, name),
+            new BeanPropertyRowMapper<>(DataUsers.class)
+            );
+        return listData.isEmpty() ? Optional.empty() : Optional.of(listData.get(0));
+    }
+
+    @Override
+    public void saveOrder(DataTransaksi order) {
+        String sql = "INSERT INTO orders (id_user, menu, jumlah) VALUES (?, ?, ?)";
+        jdbcTemplate.update(sql, order.getId_user(), order.getMenu(), order.getJumlah());
     }
 }
