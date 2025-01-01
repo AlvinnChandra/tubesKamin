@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History Pesanan - Wom Resto</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Header -->
+    <th:block th:include="~{Restoran/header :: headerAdmin}"></th:block>
+
+    <section class="order-history">
+        <h2>Daftar Pesanan</h2>
+
+        <!-- Contoh tampilan data pesanan -->
+        <div th:each="transaksi : ${transaksiList}" class="order-item">
+            <p><strong>No Pesanan: </strong><span th:text="${transaksi.no_pesanan}"></span></p>
+            <div class="order-details">
+                <p><strong>Detail Orderan:</strong></p>
+                <ul>
+                    <li><strong>Menu ID: </strong><span th:text="${transaksi.menu}"></span></li>
+                    <li><strong>Jumlah: </strong><span th:text="${transaksi.jumlah}"></span></li>
+                    <li><strong>ID User: </strong><span th:text="${transaksi.id_user}"></span></li>
+                </ul>
+            </div>
+        </div>
+
+    </section>
+
+</body>
+
+</html>
