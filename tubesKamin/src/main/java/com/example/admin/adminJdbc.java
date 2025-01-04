@@ -1,7 +1,12 @@
 package com.example.admin;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -32,7 +37,7 @@ public class adminJdbc implements adminRepository {
     public List<DataTransaksi> findAllTransaksi() {
         String sql = """
                 SELECT o.no_pesanan, o.id_user, u.nama AS namaPelanggan, o.tanggal,
-                       i.nama AS namaMenu, oi.jumlah
+                       i.nama AS namaMenu, oi.jumlah, o.status
                 FROM orders o
                 JOIN users u ON o.id_user = u.id_user
                 JOIN order_items oi ON o.no_pesanan = oi.no_pesanan
@@ -47,6 +52,7 @@ public class adminJdbc implements adminRepository {
             transaksi.setNamaPelanggan(rs.getString("namaPelanggan"));
             transaksi.setTanggal(rs.getTimestamp("tanggal").toLocalDateTime());
             transaksi.addOrderItem(rs.getString("namaMenu"), rs.getInt("jumlah"));
+            transaksi.setStatus(rs.getBoolean("status"));
             return transaksi;
         });
     }
@@ -61,8 +67,8 @@ public class adminJdbc implements adminRepository {
 
     @Override
     public Long saveMainOrder(DataTransaksi order) {
-        String sql = "INSERT INTO orders (id_user) VALUES (?) RETURNING no_pesanan";
-        return jdbcTemplate.queryForObject(sql, Long.class, order.getId_user());
+        String sql = "INSERT INTO orders (id_user, status) VALUES (?, ?) RETURNING no_pesanan";
+        return jdbcTemplate.queryForObject(sql, Long.class, order.getId_user(), true);
     }
 
     @Override
@@ -76,5 +82,59 @@ public class adminJdbc implements adminRepository {
     public Long findMenuIdByName(String menuName) {
         String sql = "SELECT id_menu FROM inventories WHERE nama = ?";
         return jdbcTemplate.queryForObject(sql, Long.class, menuName);
+    }
+
+    @Override
+    public void saveQRCode(Long noPesanan, String qrCodePath){
+        String sql = "UPDATE orders SET qr_code = ? WHERE no_pesanan = ?";
+        try {
+            jdbcTemplate.update(sql, new Object[]{Files.readAllBytes(Paths.get(qrCodePath)), noPesanan});    
+        } catch (Exception e) {
+            System.out.println("Error membaca file QR Code: " + e.getMessage());
+        }
+        
+    }
+
+    @Override
+    public void updateStatusTransaksi(Long noPesanan, boolean status){
+        String sql = "UPDATE orders SET status = ? WHERE no_pesanan = ?";
+        jdbcTemplate.update(sql, status, noPesanan);
+    }
+
+    @Override
+    public DataTransaksi findTransaksiByNoPesanan(Long noPesanan){
+        String sql = """
+        SELECT o.no_pesanan, o.id_user, u.nama AS namaPelanggan, o.tanggal,
+               i.nama AS namaMenu, oi.jumlah
+        FROM orders o
+        JOIN users u ON o.id_user = u.id_user
+        JOIN order_items oi ON o.no_pesanan = oi.no_pesanan
+        JOIN inventories i ON oi.id_menu = i.id_menu
+        WHERE o.no_pesanan = ?
+        ORDER BY o.no_pesanan;
+        """;
+
+        List<DataTransaksi> transaksiList = jdbcTemplate.query(sql, (rs, rowNum) -> {
+            DataTransaksi transaksi = new DataTransaksi();
+            transaksi.setNo_pesanan(rs.getLong("no_pesanan"));
+            transaksi.setId_user(rs.getLong("id_user"));
+            transaksi.setNamaPelanggan(rs.getString("namaPelanggan"));
+            transaksi.setTanggal(rs.getTimestamp("tanggal").toLocalDateTime());
+            transaksi.addOrderItem(rs.getString("namaMenu"), rs.getInt("jumlah"));
+            return transaksi;
+        }, noPesanan);
+
+        // Mengelompokkan transaksi berdasarkan no_pesanan
+        Map<Long, DataTransaksi> groupedTransaksi = transaksiList.stream()
+                .collect(Collectors.toMap(
+                        DataTransaksi::getNo_pesanan,
+                        transaksi -> transaksi,
+                        (existing, replacement) -> {
+                            existing.getOrderItems().addAll(replacement.getOrderItems());
+                            return existing;
+                        }));
+
+        // Mengembalikan transaksi yang sudah digabungkan berdasarkan no_pesanan
+        return groupedTransaksi.values().stream().findFirst().orElse(null);
     }
 }

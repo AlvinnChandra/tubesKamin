@@ -13,6 +13,7 @@ public class DataTransaksi {
     private String namaPelanggan;
     private LocalDateTime tanggal;
     private List<OrderItem> orderItems = new ArrayList<>();
+    private Boolean status;
 
     public void addOrderItem(String menuName, int jumlah) {
         this.orderItems.add(new OrderItem(menuName, jumlah));
