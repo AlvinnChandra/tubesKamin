@@ -109,3 +109,104 @@ header p {
 #orderBtn:hover {
     background-color: #d81b60;
 }
+
+
+/* Section History Pesanan */
+.order-history {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.order-history h2 {
+    text-align: center;
+    color: #e91e63;
+    margin-bottom: 20px;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+/* Order Item Box */
+.order-item {
+    margin-bottom: 25px;
+    padding: 20px;
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.order-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.order-item p {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.order-item p strong {
+    color: #e91e63;
+}
+
+/* Order Details Section */
+.order-details {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.order-details p {
+    font-size: 18px;
+    color: #333;
+    font-weight: bold;
+}
+
+.order-details ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.order-details li {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #555;
+}
+
+.order-details li span:first-child {
+    font-weight: bold;
+    color: #e91e63;
+}
+
+.order-details li span:last-child {
+    font-size: 16px;
+    color: #333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .order-history {
+        padding: 15px;
+    }
+
+    .order-item p {
+        font-size: 14px;
+    }
+
+    .order-details p {
+        font-size: 16px;
+    }
+
+    .order-details li {
+        font-size: 14px;
+    }
+}
