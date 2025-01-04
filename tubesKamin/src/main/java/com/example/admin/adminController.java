@@ -1,5 +1,7 @@
 package com.example.admin;
 
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,11 +13,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.QRCodeGenerator;
+import com.example.QRCodeScanner;
 import com.example.login.LoginService;
 
 @Controller
@@ -63,6 +68,19 @@ public class adminController {
             }
         }
 
+        //Buat QR COde
+        String filename = "C:\\Users\\Renggana\\OneDrive\\Documents\\GitHub\\tubesKamin\\tubesKamin\\public.key"; //GANTI INI
+        try {
+            PublicKey publicKey = QRCodeGenerator.loadPublicKey(filename);
+            String qrCodeString = QRCodeGenerator.generateQRCodeString(noPesanan, allRequestParams);
+            String encryptString = QRCodeGenerator.encrypt(qrCodeString, publicKey);
+            String qrCodePath = "QRCode/QR" + noPesanan + ".png";
+            QRCodeGenerator.generateQRCode(encryptString, qrCodePath);
+            adminRepository.saveQRCode(noPesanan, qrCodePath);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return "redirect:/admin/transaksi";
     }
 
@@ -86,6 +104,42 @@ public class adminController {
         return "Restoran/transaksi";
     }
 
+    @PostMapping("/scan-qr-code")
+    @ResponseBody
+    public ResponseEntity<?> scanQRCode(@RequestParam Long noPesanan) {
+        DataTransaksi transaksi = adminRepository.findTransaksiByNoPesanan(noPesanan);
+        if(transaksi != null){
+            String qrCodePath = "C:\\Users\\Renggana\\OneDrive\\Documents\\GitHub\\tubesKamin\\tubesKamin\\QRCode\\QR" + noPesanan + ".png";
+            try {
+                String encryptedData = QRCodeScanner.readQRCode(qrCodePath);
+                String filename = "C:\\Users\\Renggana\\OneDrive\\Documents\\GitHub\\tubesKamin\\tubesKamin\\private.key"; //GANTI INI
+                PrivateKey privateKey = QRCodeScanner.loadPrivateKey(filename);
+                String decryptedData = QRCodeScanner.decrypt(encryptedData, privateKey);
+
+                // Map<String, String> orderItemsMap = transaksi.getOrderItems().stream()
+                //     .collect(Collectors.toMap(
+                //             item -> "quantity_" + item.getMenuName(),
+                //             item -> String.valueOf(item.getJumlah())
+                //     ));
+                // String qrCodeString = QRCodeGenerator.generateQRCodeString(noPesanan, orderItemsMap);
+                // if(decryptedData.equals(qrCodeString)){
+                //     adminRepository.updateStatusTransaksi(noPesanan, false);
+                //     return ResponseEntity.ok().body(Map.of("success", true, "message", "QR Code valid"));
+                // } else {
+                //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "QR Code tidak valid"));
+                // }
+                
+                adminRepository.updateStatusTransaksi(noPesanan, false);
+                return ResponseEntity.ok().body(Map.of("success", true));
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("success", false, "message", "Gagal scan QR Code"));
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("success", false, "message", "Transaksi tidak ditemukan"));
+        } 
+    }
+    
     @GetMapping("check-name")
     @ResponseBody
     public ResponseEntity<?> checkName(@RequestParam("name") String name) {

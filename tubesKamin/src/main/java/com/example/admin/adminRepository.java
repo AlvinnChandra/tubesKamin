@@ -15,4 +15,10 @@ public interface adminRepository {
     void saveOrderItem(Long noPesanan, Long idMenu, int jumlah);
 
     Long findMenuIdByName(String menuName);
+
+    void saveQRCode(Long noPesanan, String qrCodePath);
+
+    void updateStatusTransaksi(Long noPesanan, boolean status);
+
+    DataTransaksi findTransaksiByNoPesanan(Long noPesanan);
 }

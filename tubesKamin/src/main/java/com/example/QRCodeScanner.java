@@ -1,8 +1,8 @@
 package com.example;
 
 import com.google.zxing.*;
-import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
-import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
 
 import javax.crypto.Cipher;
 import java.awt.image.BufferedImage;
@@ -17,27 +17,6 @@ import java.util.Base64;
 import javax.imageio.ImageIO;
 
 public class QRCodeScanner {
-    public static void main(String[] args) {
-        try {   
-            //Path QR Code
-            String filePath = "src/main/resources/static/QRCode/QR102.png"; //File QR yang mau dibaca
-
-            PrivateKey privateKey = loadPrivateKey("private.key");
-
-            //Read QR Code
-            String encryptedQRCode = readQRCode(filePath); //Baca QR dari path
-
-            String decryptedData = decrypt(encryptedQRCode, privateKey);
-            System.out.println("Decrypted QR Code Data: " + decryptedData); //String yang didecrypt
-
-            String orderNumber = decryptedData.substring(0, 1) + decryptedData.substring(decryptedData.length() - 2);
-            String orderDetails = decryptedData.substring(1, decryptedData.length() - 2);
-            System.out.println("Order Number: " + orderNumber);
-            System.out.println("Order Details: " + orderDetails);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 
     public static String readQRCode(String filePath) throws Exception {
         Path path = new File(filePath).toPath(); //ambil path QR Code

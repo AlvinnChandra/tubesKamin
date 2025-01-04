@@ -44,8 +44,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
 	//Buat QR
-	implementation("com.google.zxing:core:3.4.1")
-	implementation("com.google.zxing:javase:3.4.1")
+	implementation("com.google.zxing:core:3.5.1")
+	implementation("com.google.zxing:javase:3.5.1")
 }
 
 tasks.withType<Test> {
