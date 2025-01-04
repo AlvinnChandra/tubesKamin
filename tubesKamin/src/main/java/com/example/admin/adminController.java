@@ -31,30 +31,33 @@ public class adminController {
     }
 
     @GetMapping("/order")
-    public String showOrderPage(Model model){
+    public String showOrderPage(Model model) {
         List<DataInventories> menuItem = adminRepository.findAllInventories();
         model.addAttribute("menuItems", menuItem);
         return "/Restoran/orderPage";
     }
 
     @PostMapping("/order")
-    public String handleOrder(
-        @RequestParam Long id_user,
-        @RequestParam Map<String, String> allRequestParams,
-        Model model){
-        for(String key : allRequestParams.keySet()) {
+    public String handleOrder(@RequestParam Long id_user,
+            @RequestParam Map<String, String> allRequestParams,
+            Model model) {
+        DataTransaksi mainOrder = new DataTransaksi();
+        mainOrder.setId_user(id_user);
+
+        // Simpan data ke tabel orders
+        Long noPesanan = adminRepository.saveMainOrder(mainOrder);
+
+        // Iterasi untuk menyimpan detail pesanan ke order_items
+        for (String key : allRequestParams.keySet()) {
             if (key.startsWith("quantity_")) {
                 String menuName = key.substring("quantity_".length());
                 int quantity = Integer.parseInt(allRequestParams.get(key));
-                
-                // Save order to database
-                DataTransaksi order = new DataTransaksi();
-                order.setId_user(id_user);
-                order.setMenu(menuName);
-                order.setJumlah(quantity);
-                
-                // Call the repository method to save the order
-                adminRepository.saveOrder(order);
+
+                // Cari id_menu berdasarkan nama menu
+                Long idMenu = adminRepository.findMenuIdByName(menuName);
+
+                // Simpan ke tabel order_items
+                adminRepository.saveOrderItem(noPesanan, idMenu, quantity);
             }
         }
 
@@ -62,7 +65,7 @@ public class adminController {
     }
 
     @GetMapping("/transaksi")
-    public String showTransaksiPage(Model model){
+    public String showTransaksiPage(Model model) {
         List<DataTransaksi> transaksiList = adminRepository.findAllTransaksi();
         model.addAttribute("transaksiList", transaksiList);
         return "Restoran/transaksi";
@@ -70,9 +73,9 @@ public class adminController {
 
     @GetMapping("check-name")
     @ResponseBody
-    public ResponseEntity<?> checkName(@RequestParam("name") String name){
+    public ResponseEntity<?> checkName(@RequestParam("name") String name) {
         var nama = adminRepository.findName(name);
-        if(nama.isPresent()){
+        if (nama.isPresent()) {
             return ResponseEntity.ok(nama.get());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nama tidak ditemukan");
