@@ -24,8 +24,8 @@
 
             <div class="order-details">
                 <p><strong>Detail Pesanan:</strong></p>
-                <ul th:each="item : ${transaksi.orderItems}">
-                    <li>
+                <ul>
+                    <li th:each="item : ${transaksi.orderItems}">
                         <span th:text="${item.menuName}"></span>: <span th:text="${item.jumlah}"></span>
                     </li>
                 </ul>

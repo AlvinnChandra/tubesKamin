@@ -1,7 +1,9 @@
 package com.example.admin;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -67,7 +69,20 @@ public class adminController {
     @GetMapping("/transaksi")
     public String showTransaksiPage(Model model) {
         List<DataTransaksi> transaksiList = adminRepository.findAllTransaksi();
-        model.addAttribute("transaksiList", transaksiList);
+
+        // Mengelompokkan transaksi berdasarkan no_pesanan
+        Map<Long, DataTransaksi> groupedTransaksi = transaksiList.stream()
+                .collect(Collectors.toMap(
+                        DataTransaksi::getNo_pesanan,
+                        transaksi -> transaksi,
+                        (existing, replacement) -> {
+                            existing.getOrderItems().addAll(replacement.getOrderItems());
+                            return existing;
+                        }));
+
+        // Menambahkan daftar transaksi yang sudah digabungkan berdasarkan no_pesanan
+        model.addAttribute("transaksiList", new ArrayList<>(groupedTransaksi.values()));
+
         return "Restoran/transaksi";
     }
 
