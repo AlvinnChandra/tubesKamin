@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pesan Menu - Wom Resto</title>
     <link rel="stylesheet" href="/style.css">
 </head>
-<body>  
+
+<body>
     <!-- Header -->
     <th:block th:include="~{Restoran/header :: headerAdmin}"></th:block>
 
@@ -30,16 +32,10 @@
                 <img src="/img/nasi-goreng.jpg" alt="Nasi Goreng" class="menu-image">
                 <label>
                     <input type="checkbox" name="menu_items" th:value="${item.nama}" class="menu-checkbox">
-                    <span th:text="${item.nama}">Menu name</span> (Rp<span  th:text="${item.price}">Price</span>)
+                    <span th:text="${item.nama}">Menu name</span> (Rp<span th:text="${item.price}">Price</span>)
                 </label>
-                <input 
-                    type="number" 
-                    th:name="'quantity_' + ${item.nama}" 
-                    class="quantity-input" 
-                    min="1" 
-                    th:max="${item.stock}"
-                    placeholder="Jumlah" 
-                    disabled>
+                <input type="number" th:name="'quantity_' + ${item.nama}" class="quantity-input" min="1"
+                    th:max="${item.stock}" placeholder="Jumlah" disabled>
             </div>
 
             <!-- Tombol Submit -->
@@ -74,7 +70,7 @@
             input.addEventListener('input', function () {
                 const max = parseInt(this.max);
                 if (this.value > max) {
-                    this.value = max; 
+                    this.value = max;
                 }
             });
         });
@@ -82,11 +78,11 @@
         async function checkName() {
             const nameInput = document.getElementById("name").value;
 
-            if(nameInput){
+            if (nameInput) {
                 try {
                     const response = await fetch(`/admin/check-name?name=${nameInput}`);
 
-                    if(!response.ok) {
+                    if (!response.ok) {
                         throw new Error('Customer tidak ditemukan');
                     }
 
@@ -101,4 +97,5 @@
         }
     </script>
 </body>
+
 </html>
