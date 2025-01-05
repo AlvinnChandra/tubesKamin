@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History Pesanan - Wom Resto</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Header -->
+    <th:block th:include="~{Pembeli/headerCust :: headerCust}"></th:block>
+
+    <section class="order-history">
+        <h2>Daftar Pesanan</h2>
+
+        <div th:each="transaksi : ${transaksiList}" class="order-item">
+            <p><strong>No Pesanan: </strong><span th:text="${transaksi.no_pesanan}"></span></p>
+            <p><strong>Nama Pelanggan: </strong><span th:text="${transaksi.namaPelanggan}"></span></p>
+            <p><strong>Tanggal: </strong><span
+                    th:text="${#temporals.format(transaksi.tanggal, 'dd-MM-yyyy HH:mm')}"></span></p>
+
+            <div class="order-details">
+                <p><strong>Detail Pesanan:</strong></p>
+                <ul>
+                    <li th:each="item : ${transaksi.orderItems}">
+                        <span th:text="${item.menuName}"></span>: <span th:text="${item.jumlah}"></span>
+                    </li>
+                </ul>
+            </div>
+
+            <div th:if="${transaksi.status}">
+                <p><strong>QR Code:</strong></p>
+                <img th:src="@{'/QRCode/QR' + ${transaksi.no_pesanan} + '.png'}" alt="QR Code" />
+            </div>
+            <div th:unless="${transaksi.status}">
+                <p>Pesanan Sudah Selesai</p>
+            </div>
+            
+        </div>
+    </section>
+
+</body>
+
+</html>

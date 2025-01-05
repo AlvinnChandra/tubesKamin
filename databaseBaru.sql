@@ -5,26 +5,23 @@ CREATE TABLE login(
 	role varchar(255)
 )
 
+INSERT INTO login(username, password, role) VALUES ('admin', 'admin123', 'admin')
+
 CREATE TABLE users(
 	id_user SERIAL PRIMARY KEY,
 	nama varchar(255) NOT NULL,
 	no_telepon varchar(255) NOT NULL
 )
 
+INSERT INTO users(nama, no_telepon) VALUES ('coba', '08123456789')
 
 CREATE TABLE orders(
 	no_pesanan SERIAL PRIMARY KEY,
-	id_user int REFERENCES users(id_user)
+	id_user int REFERENCES users(id_user),
+	menu varchar(255) NOT NULL,
+	jumlah int NOT NULL
 )
 
 ALTER SEQUENCE orders_no_pesanan_seq RESTART WITH 101;
 
-CREATE TABLE order_items(
-	id SERIAL PRIMARY KEY,
-	no_pesanan INT REFERENCES orders(no_pesanan),
-	menu VARCHAR(255) NOT NULL,
-	jumlah INT NOT NULL
-)
-
-INSERT INTO login(username, password, role) VALUES ('admin', 'admin123', 'admin')
-
+INSERT INTO orders(id_user, menu, jumlah) VALUES (1, 'Ayam', 1)

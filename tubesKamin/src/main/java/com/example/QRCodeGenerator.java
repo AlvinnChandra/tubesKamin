@@ -17,17 +17,25 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.Date;
+import java.util.Map;
 import java.time.Instant;
 
 @Component
 public class QRCodeGenerator {
     
     //Bikin String Buat di encrypt
-    public String generateQRCodeString(String orderNumber, String orderDetails){
-        String firstDigit = orderNumber.substring(0, 1);
-        String lastTwoDigit = orderNumber.substring(orderNumber.length() - 2);
-        String formattedDetails = orderDetails.replaceAll("\\s", ""); //Hapus Spasi
-        return firstDigit + formattedDetails + lastTwoDigit;
+    public static String generateQRCodeString(Long noPesanan, Map<String, String> allRequestParams){
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.valueOf(noPesanan).substring(0, 1));
+        for(String key : allRequestParams.keySet()) {
+            if(key.startsWith("quantity_")) {
+                String menuName = key.substring("quantity_".length());
+                int quantity = Integer.parseInt(allRequestParams.get(key));
+                sb.append(menuName).append(quantity);
+            }
+        }
+        sb.append(String.valueOf(noPesanan).substring(String.valueOf(noPesanan).length() - 2));
+        return sb.toString();
     }
 
     //Membuat public key dan private key
@@ -37,16 +45,11 @@ public class QRCodeGenerator {
         return keyGen.generateKeyPair(); //Menghasilkan public key dan private key
     }
 
-    public String encrypt(String data, PublicKey publicKey) throws Exception {
+    public static String encrypt(String data, PublicKey publicKey) throws Exception {
         Cipher cipher = Cipher.getInstance("RSA"); //Object Cipher untuk enkripsi dengan algoritma RSA
         cipher.init(Cipher.ENCRYPT_MODE, publicKey); //Encrypt menggunakan public Key
         byte[] encryptedData = cipher.doFinal(data.getBytes()); //Konversi String menjadi byte agar dapat dienkripsi
         return Base64.getEncoder().encodeToString(encryptedData); //mengubah kembali ke string
-    }
-
-    //Waktu expire QR
-    public static Date getExpiryTime(int minutes){
-        return Date.from(Instant.now().plusSeconds(minutes * 60));
     }
 
     public static void generateQRCode(String data, String filePath) throws Exception {
@@ -65,7 +68,7 @@ public class QRCodeGenerator {
         }
     }
 
-    public PublicKey loadPublicKey(String filename) throws Exception {
+    public static PublicKey loadPublicKey(String filename) throws Exception {
         byte[] keyBytes = Files.readAllBytes(Paths.get(filename));
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);

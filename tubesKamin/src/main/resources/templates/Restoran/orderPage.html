@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesan Menu - Wom Resto</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <th:block th:include="~{Restoran/header :: headerAdmin}"></th:block>
+
+    <section class="order-form">
+        <h2>Pesan Sekarang</h2>
+        <form action="/admin/order" method="POST">
+            <!-- Menambil id User -->
+            <input type="hidden" id="id_user" name="id_user">
+
+            <!-- Nama -->
+            <label for="name">Nama:</label>
+            <input type="text" id="name" name="name" placeholder="Nama Anda" required onblur="checkName()">
+
+            <!-- Nomor Telepon -->
+            <label for="phone">Nomor Telepon:</label>
+            <input type="tel" id="phone" name="phone" placeholder="No telepon" required>
+
+            <!-- Pilihan Menu -->
+            <h3>Pilih Menu:</h3>
+            <div th:each="item : ${menuItems}" class="menu-item">
+                <img src="/img/nasi-goreng.jpg" alt="Nasi Goreng" class="menu-image">
+                <label>
+                    <input type="checkbox" name="menu_items" th:value="${item.nama}" class="menu-checkbox">
+                    <span th:text="${item.nama}">Menu name</span> (Rp<span th:text="${item.price}">Price</span>)
+                </label>
+                <input type="number" th:name="'quantity_' + ${item.nama}" class="quantity-input" min="1"
+                    th:max="${item.stock}" placeholder="Jumlah" disabled>
+            </div>
+
+            <!-- Tombol Submit -->
+            <button type="submit">Pesan</button>
+        </form>
+    </section>
+
+    <footer>
+        <hr>
+        <p>&copy; 2024 Wom Resto - All Rights Reserved</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Aktifkan input jumlah hanya jika menu dipilih
+        const checkboxes = document.querySelectorAll('.menu-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                const quantityInput = this.closest('.menu-item').querySelector('.quantity-input');
+                if (this.checked) {
+                    quantityInput.disabled = false;
+                    quantityInput.max = this.closest('.menu-item').querySelector('input[type="number"]').getAttribute('max');
+                } else {
+                    quantityInput.disabled = true;
+                    quantityInput.value = ''; // Reset jumlah
+                }
+            });
+        });
+
+        const quantityInputs = document.querySelectorAll('.quantity-input');
+        quantityInputs.forEach(input => {
+            input.addEventListener('input', function () {
+                const max = parseInt(this.max);
+                if (this.value > max) {
+                    this.value = max;
+                }
+            });
+        });
+
+        async function checkName() {
+            const nameInput = document.getElementById("name").value;
+
+            if (nameInput) {
+                try {
+                    const response = await fetch(`/admin/check-name?name=${nameInput}`);
+
+                    if (!response.ok) {
+                        throw new Error('Customer tidak ditemukan');
+                    }
+
+                    const data = await response.json();
+                    document.getElementById("id_user").value = data.id_user || '';
+                    document.getElementById("phone").value = data.no_telepon || '';
+
+                } catch (error) {
+                    alert(error.message);
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

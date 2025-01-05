@@ -1,4 +1,4 @@
-package com.example;
+package com.example.Config;
 
 import javax.sql.DataSource;
 
@@ -15,15 +15,15 @@ public class DataSourceConfig {
     @Value("${spring.datasource.username}")
     private String username;
 
-    @Value("$spring.datasource.password")
+    @Value("${spring.datasource.password}")
     private String password;
 
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setUrl(url);
-        dataSource.setUsername("postgres");
-        dataSource.setPassword("postgres");
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
         return dataSource;
     }
 }
