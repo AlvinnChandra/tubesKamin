@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.QRCodeGenerator;
 import com.example.QRCodeScanner;
-import com.example.login.LoginService;
+import com.example.Login.LoginService;
 
 @Controller
 @RequestMapping("/admin")
