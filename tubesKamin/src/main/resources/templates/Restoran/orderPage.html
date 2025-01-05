@@ -29,7 +29,7 @@
             <!-- Pilihan Menu -->
             <h3>Pilih Menu:</h3>
             <div th:each="item : ${menuItems}" class="menu-item">
-                <img src="/img/nasi-goreng.jpg" alt="Nasi Goreng" class="menu-image">
+                <img th:src="${item.photosURL}" alt="Foto Menu" class="menu-image">
                 <label>
                     <input type="checkbox" name="menu_items" th:value="${item.nama}" class="menu-checkbox">
                     <span th:text="${item.nama}">Menu name</span> (Rp<span th:text="${item.price}">Price</span>)

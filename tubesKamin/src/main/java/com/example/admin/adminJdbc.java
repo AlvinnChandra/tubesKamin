@@ -26,6 +26,7 @@ public class adminJdbc implements adminRepository {
             DataInventories item = new DataInventories();
             item.setId_menu(rs.getLong("id_menu"));
             item.setNama(rs.getString("nama"));
+            item.setPhotosURL(rs.getString("photosURL"));
             item.setDescription(rs.getString("description"));
             item.setPrice(rs.getBigDecimal("price"));
             item.setStock(rs.getInt("stock"));
