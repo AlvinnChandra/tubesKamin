@@ -14,10 +14,14 @@
         <p>Rasakan kelezatan dalam setiap gigitan</p>
     </header>
 
+    <div th:if="${error}" class="error-message">
+        <p th:text="${error}"></p>
+    </div>
+
     <a href="order">History Pemesanan</a>
     <section class="order-form">
         <h2>Pesan Sekarang</h2>
-        <form action="/api/order" method="POST">
+        <form action="/menu" method="POST">
             <!-- Nama -->
             <label for="name">Nama:</label>
             <input type="text" id="name" name="name" placeholder="Nama Anda" required>
