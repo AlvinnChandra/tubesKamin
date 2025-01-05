@@ -20,7 +20,9 @@ INSERT INTO users(nama, passwords, no_telepon, peran) VALUES
 CREATE TABLE orders(
     no_pesanan SERIAL PRIMARY KEY,
     id_user INT REFERENCES users(id_user),
-    tanggal TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    tanggal TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	qr_code BYTEA,
+	status BOOLEAN
 );
 
 ALTER SEQUENCE orders_no_pesanan_seq RESTART WITH 101;

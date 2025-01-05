@@ -69,7 +69,7 @@ public class adminController {
         }
 
         //Buat QR COde
-        String filename = "C:\\Users\\Renggana\\OneDrive\\Documents\\GitHub\\tubesKamin\\tubesKamin\\public.key"; //GANTI INI
+        String filename = "C:\\kuliahDion\\kamin\\tubes\\tubesKamin\\tubesKamin\\public.key"; //GANTI INI
         try {
             PublicKey publicKey = QRCodeGenerator.loadPublicKey(filename);
             String qrCodeString = QRCodeGenerator.generateQRCodeString(noPesanan, allRequestParams);
@@ -109,10 +109,10 @@ public class adminController {
     public ResponseEntity<?> scanQRCode(@RequestParam Long noPesanan) {
         DataTransaksi transaksi = adminRepository.findTransaksiByNoPesanan(noPesanan);
         if(transaksi != null){
-            String qrCodePath = "C:\\Users\\Renggana\\OneDrive\\Documents\\GitHub\\tubesKamin\\tubesKamin\\QRCode\\QR" + noPesanan + ".png";
+            String qrCodePath = "C:\\kuliahDion\\kamin\\tubes\\tubesKamin\\tubesKamin\\QRCode\\QR" + noPesanan + ".png";
             try {
                 String encryptedData = QRCodeScanner.readQRCode(qrCodePath);
-                String filename = "C:\\Users\\Renggana\\OneDrive\\Documents\\GitHub\\tubesKamin\\tubesKamin\\private.key"; //GANTI INI
+                String filename = "C:\\kuliahDion\\kamin\\tubes\\tubesKamin\\tubesKamin\\private.key"; //GANTI INI
                 PrivateKey privateKey = QRCodeScanner.loadPrivateKey(filename);
                 String decryptedData = QRCodeScanner.decrypt(encryptedData, privateKey);
 
