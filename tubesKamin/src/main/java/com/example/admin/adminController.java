@@ -121,21 +121,21 @@ public class adminController {
                 PrivateKey privateKey = QRCodeScanner.loadPrivateKey(filename);
                 String decryptedData = QRCodeScanner.decrypt(encryptedData, privateKey);
 
-                // Map<String, String> orderItemsMap = transaksi.getOrderItems().stream()
-                //     .collect(Collectors.toMap(
-                //             item -> "quantity_" + item.getMenuName(),
-                //             item -> String.valueOf(item.getJumlah())
-                //     ));
-                // String qrCodeString = QRCodeGenerator.generateQRCodeString(noPesanan, orderItemsMap);
-                // if(decryptedData.equals(qrCodeString)){
-                //     adminRepository.updateStatusTransaksi(noPesanan, false);
-                //     return ResponseEntity.ok().body(Map.of("success", true, "message", "QR Code valid"));
-                // } else {
-                //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "QR Code tidak valid"));
-                // }
+                Map<String, String> orderItemsMap = transaksi.getOrderItems().stream()
+                    .collect(Collectors.toMap(
+                            item -> "quantity_" + item.getMenuName(),
+                            item -> String.valueOf(item.getJumlah())
+                    ));
+                String qrCodeString = QRCodeGenerator.generateQRCodeString(noPesanan, orderItemsMap);
+                if(decryptedData.equals(qrCodeString)){
+                    adminRepository.updateStatusTransaksi(noPesanan, false);
+                    return ResponseEntity.ok().body(Map.of("success", true, "message", "QR Code valid"));
+                } else {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "QR Code tidak valid"));
+                }
                 
-                adminRepository.updateStatusTransaksi(noPesanan, false);
-                return ResponseEntity.ok().body(Map.of("success", true));
+                // adminRepository.updateStatusTransaksi(noPesanan, false);
+                // return ResponseEntity.ok().body(Map.of("success", true));
             } catch (Exception e) {
                 e.printStackTrace();
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("success", false, "message", "Gagal scan QR Code"));
