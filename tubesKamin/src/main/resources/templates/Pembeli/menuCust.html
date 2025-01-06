@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesan Menu - Wom Resto</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <th:block th:include="~{Pembeli/headerCust :: headerCust}"></th:block>
+
+    <section class="menu">
+        <h2>Daftar Menu</h2>
+
+        <div th:each="item : ${menuItems}" class="menu-item">
+            <img th:src="${item.photosURL}" alt="Foto menu" class="menu-image">
+            <div class="menu-info">
+                <span class="menu-name" th:text="${item.nama}"></span>
+                <p class="menu-desc" th:text="${item.description}"></p>
+                <span class="menu-price" th:text="${item.price}"></span>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <hr>
+        <p>&copy; 2024 Wom Resto - All Rights Reserved</p>
+    </footer>
+</body>
+
+</html>
