@@ -35,6 +35,13 @@ public class adminController {
         return "/Restoran/menu";
     }
 
+    @GetMapping("/menuCust")
+    public String showMenuCustPage(Model model) {
+        List<DataInventories> menuItem = adminRepository.findAllInventories();
+        model.addAttribute("menuItems", menuItem);
+        return "/Pembeli/menuCust";
+    }
+
     @GetMapping("/order")
     public String showOrderPage(Model model) {
         List<DataInventories> menuItem = adminRepository.findAllInventories();
