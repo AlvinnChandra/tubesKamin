@@ -20,7 +20,9 @@ INSERT INTO users(nama, passwords, no_telepon, peran) VALUES
 CREATE TABLE orders(
     no_pesanan SERIAL PRIMARY KEY,
     id_user INT REFERENCES users(id_user),
-    tanggal TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    tanggal TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	qr_code BYTEA,
+	status BOOLEAN
 );
 
 ALTER SEQUENCE orders_no_pesanan_seq RESTART WITH 101;
@@ -29,17 +31,18 @@ ALTER SEQUENCE orders_no_pesanan_seq RESTART WITH 101;
 CREATE TABLE inventories(
     id_menu SERIAL PRIMARY KEY,
     nama VARCHAR(255) NOT NULL,
+	photosURL TEXT NOT NULL,
     description TEXT NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     stock INT NOT NULL
 );
 
-INSERT INTO inventories (nama, description, price, stock) VALUES
-('Nasi Goreng', 'Nasi goreng dengan bumbu spesial dan tambahan telur mata sapi.', 20000.00, 20),
-('Ayam Bakar', 'Ayam bakar dengan bumbu rempah khas dan sambal pedas.', 25000.00, 30),
-('Soto Ayam', 'Soto ayam dengan kuah gurih dan pelengkap seperti telur dan perkedel.', 18000.00, 40),
-('Ayam Goreng', 'Ayam goreng renyah dengan bumbu tradisional yang meresap hingga ke dalam, disajikan dengan sambal dan lalapan segar.', 18000.00, 40),
-('Teh Tarik', 'Minuman penghilang dahaga saat haus', 10000.00, 80);
+INSERT INTO inventories (nama, photosURL, description, price, stock) VALUES
+('Nasi Goreng','/img/nasi-goreng.jpg', 'Nasi goreng dengan bumbu spesial dan tambahan telur mata sapi.', 20000.00, 20),
+('Ayam Bakar', '/img/ayam-bakar.jpg','Ayam bakar dengan bumbu rempah khas dan sambal pedas.', 25000.00, 30),
+('Soto Ayam', '/img/soto-ayam.jpg', 'Soto ayam dengan kuah gurih dan pelengkap seperti telur dan perkedel.', 18000.00, 40),
+('Ayam Goreng', '/img/ayam-goreng.jpeg', 'Ayam goreng renyah dengan bumbu tradisional yang meresap hingga ke dalam, disajikan dengan sambal dan lalapan segar.', 18000.00, 40),
+('Teh Tarik', '/img/teh-tarik.jpg', 'Minuman penghilang dahaga saat haus', 10000.00, 80);
 
 -- Tabel detail pesanan (order_items)
 CREATE TABLE order_items(

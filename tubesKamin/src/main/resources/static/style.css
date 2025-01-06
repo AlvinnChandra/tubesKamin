@@ -8,7 +8,7 @@ body {
 
 
 /* Section Menu */
-.menu {
+.menu, .order-form {
     max-width: 800px;
     margin: 30px auto;
     padding: 20px;
@@ -17,7 +17,7 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.menu h2 {
+.menu h2, .order-form h2 {
     text-align: center;
     color: #e91e63;
     margin-bottom: 20px;

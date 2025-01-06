@@ -10,6 +10,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/QRCode/**")
-                .addResourceLocations("file:/C:/Users/Renggana/OneDrive/Documents/GitHub/tubesKamin/tubesKamin/QRCode/"); //GANTI INI
+                .addResourceLocations("file:/C:/kuliahDion/kamin/tubes/tubesKamin/tubesKamin/QRCode/"); //GANTI INI
     }
 }

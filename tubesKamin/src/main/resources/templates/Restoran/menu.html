@@ -16,7 +16,7 @@
         <h2>Daftar Menu</h2>
 
         <div th:each="item : ${menuItems}" class="menu-item">
-            <img src="/img/nasi-goreng.jpg" alt="Nasi Goreng" class="menu-image">
+            <img th:src="${item.photosURL}" alt="Foto menu" class="menu-image">
             <div class="menu-info">
                 <span class="menu-name" th:text="${item.nama}"></span>
                 <p class="menu-desc" th:text="${item.description}"></p>

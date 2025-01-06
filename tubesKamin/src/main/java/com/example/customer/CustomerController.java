@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.example.admin.DataTransaksi;
-import com.example.login.LoginData;
+import com.example.Login.LoginData;
 
 
 @Controller

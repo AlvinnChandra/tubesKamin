@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.QRCodeGenerator;
 import com.example.QRCodeScanner;
-import com.example.login.LoginService;
 
 @Controller
 @RequestMapping("/admin")
@@ -69,7 +67,7 @@ public class adminController {
         }
 
         //Buat QR COde
-        String filename = "C:\\Users\\Renggana\\OneDrive\\Documents\\GitHub\\tubesKamin\\tubesKamin\\public.key"; //GANTI INI
+        String filename = "C:\\kuliahDion\\kamin\\tubes\\tubesKamin\\tubesKamin\\public.key"; //GANTI INI
         try {
             PublicKey publicKey = QRCodeGenerator.loadPublicKey(filename);
             String qrCodeString = QRCodeGenerator.generateQRCodeString(noPesanan, allRequestParams);
@@ -109,10 +107,10 @@ public class adminController {
     public ResponseEntity<?> scanQRCode(@RequestParam Long noPesanan) {
         DataTransaksi transaksi = adminRepository.findTransaksiByNoPesanan(noPesanan);
         if(transaksi != null){
-            String qrCodePath = "C:\\Users\\Renggana\\OneDrive\\Documents\\GitHub\\tubesKamin\\tubesKamin\\QRCode\\QR" + noPesanan + ".png";
+            String qrCodePath = "C:\\kuliahDion\\kamin\\tubes\\tubesKamin\\tubesKamin\\QRCode\\QR" + noPesanan + ".png";
             try {
                 String encryptedData = QRCodeScanner.readQRCode(qrCodePath);
-                String filename = "C:\\Users\\Renggana\\OneDrive\\Documents\\GitHub\\tubesKamin\\tubesKamin\\private.key"; //GANTI INI
+                String filename = "C:\\kuliahDion\\kamin\\tubes\\tubesKamin\\tubesKamin\\private.key"; //GANTI INI
                 PrivateKey privateKey = QRCodeScanner.loadPrivateKey(filename);
                 String decryptedData = QRCodeScanner.decrypt(encryptedData, privateKey);
 
